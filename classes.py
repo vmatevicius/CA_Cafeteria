@@ -130,15 +130,12 @@ class Orders:
     ):
         if alcohol != None and alcohol_free != None:
             self.orders.append(Order(name, surname, foods, alcohol, alcohol_free))
-        if alcohol != None:
+        if alcohol != None and alcohol_free == None:
             self.orders.append(Order(name, surname, foods, alcohol))
-        if alcohol_free != None:
+        if alcohol_free != None and alcohol == None:
             self.orders.append(Order(name, surname, foods, alcohol_free))
-        else:
-            order = Order(name, surname, foods)
-            self.orders.append(order)
 
-    def add_to_order(
+    def update_order_quantities(
         self,
         name: str,
         surname: str,
@@ -165,11 +162,61 @@ class Orders:
                 if order.name == name and order.surname == surname:
                     order.foods.update(foods)
 
-    def remove_from_order(self):
-        pass
+    def remove_from_order(self, name: str, surname: str, item_to_remove: str):
+        for order in self.orders:
+            if order.name == name and order.surname == surname:
+                if item_to_remove in m.VALID_DRINKS:
+                    del order.alcohol_free[item_to_remove]
+                if item_to_remove in m.VALID_FOODS:
+                    del order.foods[item_to_remove]
+                if item_to_remove in m.VALID_ALC_DRINKS:
+                    del order.alcohol[item_to_remove]
+            else:
+                return f"Customer does not exist or has not ordered anything yet"
 
-    def update_order_quantities(self):
-        pass
+    def add_to_order(
+        self,
+        name: str,
+        surname: str,
+        alcohol: Dict[str, int] = None,
+        alcohol_free: Dict[str, int] = None,
+        foods: Dict[str, int] = None,
+    ):
+        if alcohol == None:
+            pass
+        else:
+            for order in self.orders:
+                if order.name == name and order.surname == surname:
+                    for key, value in alcohol.items():
+                        if order.alcohol == None:
+                            order.alcohol = {}
+                            order.alcohol[key] = value
+                        else:
+                            order.alcohol[key] = value
+                else:
+                    continue
+        if alcohol_free == None:
+            pass
+        else:
+            for order in self.orders:
+                if order.name == name and order.surname == surname:
+                    for key, value in alcohol_free.items():
+                        if order.alcohol_free == None:
+                            order.alcohol_free = {}
+                            order.alcohol_free[key] = value
+                        else:
+                            order.alcohol_free[key] = value
+                else:
+                    continue
+        if foods == None:
+            pass
+        else:
+            for order in self.orders:
+                if order.name == name and order.surname == surname:
+                    for key, value in foods.items():
+                        order.foods[key] = value
+                else:
+                    continue
 
     def show_order_summarized(self):
         pass
@@ -177,89 +224,6 @@ class Orders:
     def show_order_cost(self):
         pass
 
-
-#
-
-#     def remove_from_order(self, full_name: str, what_to_remove: str) -> None:
-#         del self.orders[full_name][what_to_remove]
-
-#     def update_order_quantities(
-#         self,
-#         full_name: str,
-#         alcohol: Dict[str, int] = None,
-#         alcohol_free: Dict[str, int] = None,
-#         foods: Dict[str, int] = None,
-#     ) -> None:
-#         if alcohol == None:
-#             pass
-#         else:
-#             for key, value in alcohol.items():
-#                 self.orders[full_name][key]["quantity"] = value
-#         if alcohol_free == None:
-#             pass
-#         else:
-#             for key, value in alcohol_free.items():
-#                 self.orders[full_name][key]["quantity"] = value
-#         if foods == None:
-#             pass
-#         else:
-#             for key, value in foods.items():
-#                 self.orders[full_name][key]["quantity"] = value
-
-#     def add_to_order_quantities(
-#         self,
-#         full_name: str,
-#         alcohol: Dict[str, int] = None,
-#         alcohol_free: Dict[str, int] = None,
-#         foods: Dict[str, int] = None,
-#     ):
-#         if alcohol == None:
-#             pass
-#         else:
-#             for key, value in alcohol.items():
-#                 self.orders[full_name][key]["quantity"] += value
-#         if alcohol_free == None:
-#             pass
-#         else:
-#             for key, value in alcohol_free.items():
-#                 self.orders[full_name][key]["quantity"] += value
-#         if foods == None:
-#             pass
-#         else:
-#             for key, value in foods.items():
-#                 self.orders[full_name][key]["quantity"] += value
-
-#     def subtract_from_order_amounts(
-#         self,
-#         full_name: str,
-#         alcohol: Dict[str, int] = None,
-#         alcohol_free: Dict[str, int] = None,
-#         foods: Dict[str, int] = None,
-#     ):
-#         if alcohol == None:
-#             pass
-#         else:
-#             for key, value in alcohol.items():
-#                 amount = self.orders[full_name][key]["quantity"]
-#                 self.orders[full_name][key]["quantity"] = amount - value
-#                 if self.orders[full_name][key]["quantity"] == 0:
-#                     del self.orders[full_name][key]
-#         if alcohol_free == None:
-#             pass
-#         else:
-#             for key, value in alcohol_free.items():
-#                 amount = self.orders[full_name][key]["quantity"]
-#                 self.orders[full_name][key]["quantity"] = amount - value
-#                 if self.orders[full_name][key]["quantity"] == 0:
-#                     del self.orders[full_name][key]
-#         if foods == None:
-#             pass
-#         else:
-#             for key, value in foods.items():
-#                 amount = self.orders[full_name][key]["quantity"]
-#                 self.orders[full_name][key]["quantity"] = amount - value
-#                 if self.orders[full_name][key]["quantity"] == 0:
-#                     del self.orders[full_name][key]
 
 #     def show_order_summarized(self, full_name: str) -> None:
 #         total_cost = self.show_order_cost(full_name=full_name)
@@ -305,6 +269,3 @@ class Orders:
 # )
 # table.show_reserved_tables()
 # print(table.show_reservation(name="Anton", surname="Nezinosi"))
-
-# menu = Menu()
-# menu.show_menus()

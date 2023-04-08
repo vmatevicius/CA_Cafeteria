@@ -11,7 +11,8 @@ VALID_FOODS = [
     "Chicken salad",
 ]
 
-VALID_DRINKS = ["Vine", "Beer", "Orange juice", "Cola"]
+VALID_DRINKS = ["Orange juice", "Cola"]
+VALID_ALC_DRINKS = ["Vine", "Beer"]
 
 SPECIAL_MENU = {
     "Vegetarian": {
