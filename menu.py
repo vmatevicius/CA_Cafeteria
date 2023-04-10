@@ -1,18 +1,24 @@
-VALID_FOODS = [
-    "Fish",
-    "Egg fried rice",
-    "Beetroot soup",
-    "Salad",
-    "Eggs and bacon",
-    "Oatmeal",
-    "Steak",
-    "Grilled chicken",
-    "Beef burger",
-    "Chicken salad",
-]
+VALID_FOODS = {
+    "Fish": 6,
+    "Egg fried rice": 3.5,
+    "Beetroot soup": 2,
+    "Salad": 2.5,
+    "Eggs and bacon": 3,
+    "Oatmeal": 2,
+    "Steak": 6.5,
+    "Grilled chicken": 6,
+    "Beef burger": 4.5,
+    "Chicken salad": 5.5,
+}
 
-VALID_DRINKS = ["Orange juice", "Cola"]
-VALID_ALC_DRINKS = ["Vine", "Beer"]
+VALID_DRINKS = {
+    "Orange juice": 2,
+    "Cola": 2,
+}
+VALID_ALC_DRINKS = {
+    "Vine": 4,
+    "Beer": 3,
+}
 
 SPECIAL_MENU = {
     "Vegetarian": {
