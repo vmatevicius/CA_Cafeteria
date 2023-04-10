@@ -1,8 +1,13 @@
 import json
+from typing import List
+import menu as m
 
 
-def greet_customer():
-    return f"Welcome to our cafeteria!"
+# app helpers:
+def check_if_food_valid(food_name: str):
+    if food_name not in m.VALID_FOODS:
+        return False
+    return True
 
 
 def identify_input(user_input: str) -> bool:
@@ -18,7 +23,7 @@ def get_valid_table_id() -> int:
             table_id = int(input("And the id of the table type?: ").strip())
             return table_id
         except ValueError:
-            print("You must enter a single number")
+            print("You must enter valid number")
             continue
 
 
@@ -47,7 +52,14 @@ def get_valid_time() -> str:
             return time
 
 
+# class helpers:
 def print_menu(submenu_name: str) -> str:
     print(
         f'{json.dumps(submenu_name, indent=2).replace("{", "").replace("}", "").strip()}'
     )
+
+
+def is_value_not_none(variable_name) -> bool:
+    if variable_name == None:
+        return False
+    return True

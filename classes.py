@@ -6,6 +6,8 @@ from datetime import datetime
 
 
 class Menu:
+    current_time = int(datetime.now().strftime("%H"))
+
     def __init__(self) -> None:
         self.alcohol = m.DRINKS["Alcohol"]
         self.alcohol_free = m.DRINKS["Alcohol free"]
@@ -16,18 +18,44 @@ class Menu:
         self.vegetarian = m.SPECIAL_MENU["Vegetarian"]
 
     def show_menus(self) -> Dict[str, Union[float, int]]:
-        current_time = int(datetime.now().strftime("%H"))
         h.print_menu(submenu_name=self.alcohol)
         h.print_menu(submenu_name=self.alcohol_free)
         h.print_menu(submenu_name=self.vegetarian)
         h.print_menu(submenu_name=self.vegan)
 
-        if 12 < current_time < 18:
+        if 12 < self.current_time < 18:
             h.print_menu(submenu_name=self.lunch)
-        if 12 > current_time:
+        if 12 > self.current_time:
             h.print_menu(submenu_name=self.breakfast)
-        if 18 < current_time:
+        if 18 < self.current_time:
             h.print_menu(submenu_name=self.dinner)
+
+    def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
+        if 12 < self.current_time < 18:
+            return dict(
+                self.alcohol,
+                **self.alcohol_free,
+                **self.vegan,
+                **self.vegetarian,
+                **self.lunch,
+            )
+        if 12 > self.current_time:
+            return dict(
+                self.alcohol,
+                **self.alcohol_free,
+                **self.vegan,
+                **self.vegetarian,
+                **self.breakfast,
+            )
+        if 18 < self.current_time:
+            return dict(
+                self.alcohol,
+                **self.alcohol_free,
+                **self.vegan,
+                **self.vegetarian,
+                **self.dinner,
+            )
+        return dict()
 
 
 class Reservation:
@@ -145,21 +173,15 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
         foods: Dict[str, int] = None,
     ) -> None:
-        if alcohol == None:
-            pass
-        else:
+        if h.is_value_not_none(alcohol):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol.update(alcohol)
-        if alcohol_free == None:
-            pass
-        else:
+        if h.is_value_not_none(alcohol_free):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol_free.update(alcohol_free)
-        if foods == None:
-            pass
-        else:
+        if h.is_value_not_none(foods):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.foods.update(foods)
@@ -187,9 +209,7 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
         foods: Dict[str, int] = None,
     ) -> None:
-        if alcohol == None:
-            pass
-        else:
+        if h.is_value_not_none(alcohol):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in alcohol.items():
@@ -200,9 +220,7 @@ class Orders:
                             order.alcohol[key] = value
                 else:
                     continue
-        if alcohol_free == None:
-            pass
-        else:
+        if h.is_value_not_none(alcohol_free):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in alcohol_free.items():
@@ -213,9 +231,7 @@ class Orders:
                             order.alcohol_free[key] = value
                 else:
                     continue
-        if foods == None:
-            pass
-        else:
+        if h.is_value_not_none(foods):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in foods.items():
@@ -223,7 +239,7 @@ class Orders:
                 else:
                     continue
 
-    def calculate_order_cost(self, name: str, surname: str) -> Dict[str, int]:
+    def calculate_order_cost(self, name: str, surname: str) -> None:
         full_menu = dict(m.VALID_ALC_DRINKS, **m.VALID_DRINKS, **m.VALID_FOODS)
         for order in self.orders:
             if order.name == name and order.surname == surname:
@@ -240,9 +256,8 @@ class Orders:
                 print("Your order is :")
                 for key, value in full_order.items():
                     print(f"{key}, quantity: {value}")
-        return full_order
 
-    def get_order_cost(self, name: str, surname: str) -> None:
+    def get_order_cost(self, name: str, surname: str) -> Union[int, float]:
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 return order.total_cost
