@@ -1,12 +1,20 @@
 import json
-from typing import List
+from typing import List, Dict
 import menu as m
 
 
 # app helpers:
-def check_if_food_valid(food_name: str):
+def check_if_food_valid(food_name: str) -> bool:
     if food_name not in m.VALID_FOODS:
         return False
+    return True
+
+
+def check_if_drink_valid(drink_name: str) -> bool:
+    if drink_name not in m.VALID_DRINKS:
+        if drink_name not in m.VALID_ALC_DRINKS:
+            return False
+        return True
     return True
 
 
@@ -53,7 +61,13 @@ def get_valid_time() -> str:
 
 
 # class helpers:
-def print_menu(submenu_name: str) -> str:
+def print_food_menu(submenu_name: str) -> str:
+    print(
+        f'{json.dumps(submenu_name, indent=2).replace("{", "").replace("}", "").strip()}'
+    )
+
+
+def print_drink_menu(submenu_name: str) -> str:
     print(
         f'{json.dumps(submenu_name, indent=2).replace("{", "").replace("}", "").strip()}'
     )

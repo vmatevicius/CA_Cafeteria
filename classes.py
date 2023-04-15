@@ -17,18 +17,20 @@ class Menu:
         self.vegan = m.SPECIAL_MENU["Vegan"]
         self.vegetarian = m.SPECIAL_MENU["Vegetarian"]
 
-    def show_menus(self) -> Dict[str, Union[float, int]]:
-        h.print_menu(submenu_name=self.alcohol)
-        h.print_menu(submenu_name=self.alcohol_free)
-        h.print_menu(submenu_name=self.vegetarian)
-        h.print_menu(submenu_name=self.vegan)
+    def show_food_menu(self) -> Dict[str, Union[float, int]]:
+        h.print_food_menu(submenu_name=self.vegetarian)
+        h.print_food_menu(submenu_name=self.vegan)
 
         if 12 < self.current_time < 18:
-            h.print_menu(submenu_name=self.lunch)
+            h.print_food_menu(submenu_name=self.lunch)
         if 12 > self.current_time:
-            h.print_menu(submenu_name=self.breakfast)
+            h.print_food_menu(submenu_name=self.breakfast)
         if 18 < self.current_time:
-            h.print_menu(submenu_name=self.dinner)
+            h.print_food_menu(submenu_name=self.dinner)
+
+    def show_all_drinks(self) -> Dict[str, Union[float, int]]:
+        h.print_food_menu(submenu_name=self.alcohol)
+        h.print_food_menu(submenu_name=self.alcohol_free)
 
     def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
         if 12 < self.current_time < 18:
@@ -243,14 +245,24 @@ class Orders:
         full_menu = dict(m.VALID_ALC_DRINKS, **m.VALID_DRINKS, **m.VALID_FOODS)
         for order in self.orders:
             if order.name == name and order.surname == surname:
-                full_order = dict(order.foods, **order.alcohol, **order.alcohol_free)
+                if order.alcohol == None:
+                    full_order = dict(order.foods, **order.alcohol_free)
+                if order.alcohol_free == None:
+                    full_order = dict(order.foods, **order.alcohol)
+                if order.alcohol_free and order.alcohol == None:
+                    full_order = dict(order.foods)
                 for key in full_order.keys():
                     order.total_cost += full_menu[key] * full_order[key]
 
     def show_order_summarized(self, name: str, surname: str) -> None:
         for order in self.orders:
             if order.name == name and order.surname == surname:
-                full_order = dict(order.foods, **order.alcohol, **order.alcohol_free)
+                if order.alcohol == None:
+                    full_order = dict(order.foods, **order.alcohol_free)
+                if order.alcohol_free == None:
+                    full_order = dict(order.foods, **order.alcohol)
+                if order.alcohol_free and order.alcohol == None:
+                    full_order = dict(order.foods)
                 self.calculate_order_cost(name, surname)
                 print(f"Total cost is : {self.get_order_cost(name, surname)}")
                 print("Your order is :")
@@ -261,6 +273,9 @@ class Orders:
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 return order.total_cost
+
+    def calculate_prep_time(self) -> None:
+        pass
 
 
 # class Payment:
