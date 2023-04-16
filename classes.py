@@ -18,19 +18,19 @@ class Menu:
         self.vegetarian = m.SPECIAL_MENU["Vegetarian"]
 
     def show_food_menu(self) -> Dict[str, Union[float, int]]:
-        h.print_food_menu(submenu_name=self.vegetarian)
-        h.print_food_menu(submenu_name=self.vegan)
+        h.print_menu(submenu_name=self.vegetarian)
+        h.print_menu(submenu_name=self.vegan)
 
         if 12 < self.current_time < 18:
-            h.print_food_menu(submenu_name=self.lunch)
+            h.print_menu(submenu_name=self.lunch)
         if 12 > self.current_time:
-            h.print_food_menu(submenu_name=self.breakfast)
+            h.print_menu(submenu_name=self.breakfast)
         if 18 < self.current_time:
-            h.print_food_menu(submenu_name=self.dinner)
+            h.print_menu(submenu_name=self.dinner)
 
     def show_all_drinks(self) -> Dict[str, Union[float, int]]:
-        h.print_food_menu(submenu_name=self.alcohol)
-        h.print_food_menu(submenu_name=self.alcohol_free)
+        h.print_menu(submenu_name=self.alcohol)
+        h.print_menu(submenu_name=self.alcohol_free)
 
     def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
         if 12 < self.current_time < 18:
@@ -57,7 +57,6 @@ class Menu:
                 **self.vegetarian,
                 **self.dinner,
             )
-        return dict()
 
 
 class Reservation:
@@ -139,6 +138,7 @@ class Order:
         alcohol: Dict[str, int] = None,
         alcohol_free: Dict[str, int] = None,
         total_cost: Union[int, float] = 0,
+        prep_time: int = 0,
     ) -> None:
         self.name = name
         self.surname = surname
@@ -146,6 +146,7 @@ class Order:
         self.alcohol = alcohol
         self.alcohol_free = alcohol_free
         self.total_cost = total_cost
+        self.prep_time = prep_time
 
 
 class Orders:
@@ -264,18 +265,40 @@ class Orders:
                 if order.alcohol_free and order.alcohol == None:
                     full_order = dict(order.foods)
                 self.calculate_order_cost(name, surname)
-                print(f"Total cost is : {self.get_order_cost(name, surname)}")
+                self.calculate_prep_time(name, surname)
+                print(f"Total cost is {self.get_order_cost(name, surname)} dollars")
                 print("Your order is :")
                 for key, value in full_order.items():
                     print(f"{key}, quantity: {value}")
+                print(f"Total preparation time will be around {order.prep_time} mins")
 
     def get_order_cost(self, name: str, surname: str) -> Union[int, float]:
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 return order.total_cost
 
-    def calculate_prep_time(self) -> None:
-        pass
+    def calculate_prep_time(self, name: str, surname: str) -> None:
+        menu = Menu().get_menu()
+        for order in self.orders:
+            if order.name == name and order.surname == surname:
+                for key, value in order.foods.items():
+                    order.prep_time += (
+                        int(menu[key]["prep.time"].replace("min", "")) * value
+                    )
+                if order.alcohol == None:
+                    pass
+                else:
+                    for key, value in order.alcohol.items():
+                        order.prep_time += (
+                            int(menu[key]["prep.time"].replace("min", "")) * value
+                        )
+                if order.alcohol_free == None:
+                    pass
+                else:
+                    for key, value in order.alcohol_free.items():
+                        order.prep_time += (
+                            int(menu[key]["prep.time"].replace("min", "")) * value
+                        )
 
 
 # class Payment:

@@ -71,7 +71,7 @@ if h.identify_input(user_answer):
         else:
             break
     if h.identify_input(user_answer):
-        print("Here is our drink menu: ")
+        print("Here is our drinks menu: ")
         menu.show_all_drinks()
         alcohol = {}
         alc_free = {}
@@ -119,8 +119,6 @@ if h.identify_input(user_answer):
                 break
             else:
                 continue
-        print("Not fully implemented")
-        # show order prep time
         if alcohol:
             pass
         else:

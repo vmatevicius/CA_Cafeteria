@@ -61,13 +61,7 @@ def get_valid_time() -> str:
 
 
 # class helpers:
-def print_food_menu(submenu_name: str) -> str:
-    print(
-        f'{json.dumps(submenu_name, indent=2).replace("{", "").replace("}", "").strip()}'
-    )
-
-
-def print_drink_menu(submenu_name: str) -> str:
+def print_menu(submenu_name: str) -> str:
     print(
         f'{json.dumps(submenu_name, indent=2).replace("{", "").replace("}", "").strip()}'
     )

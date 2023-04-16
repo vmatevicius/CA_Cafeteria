@@ -37,7 +37,9 @@ if h.identify_input(user_answer):
         surname = input("And surname: ").strip()
         table_type = h.get_valid_table_type()
         table_id = h.get_valid_table_id()
+        # this part needs work
         time = h.get_valid_time()
+        # this part needs work
         tables.reserve_table(
             name=name,
             surname=surname,
