@@ -1,7 +1,7 @@
 from typing import Union, Dict, Optional, List
-import menu as m
-import tables as t
-import helpers as h
+import menu as menu_dict
+import tables as table_dict
+import helpers as helpers
 from datetime import datetime
 
 
@@ -9,28 +9,28 @@ class Menu:
     current_time = int(datetime.now().strftime("%H"))
 
     def __init__(self) -> None:
-        self.alcohol = m.DRINKS["Alcohol"]
-        self.alcohol_free = m.DRINKS["Alcohol free"]
-        self.breakfast = m.BREAKFAST
-        self.lunch = m.LUNCH
-        self.dinner = m.DINNER
-        self.vegan = m.SPECIAL_MENU["Vegan"]
-        self.vegetarian = m.SPECIAL_MENU["Vegetarian"]
+        self.alcohol = menu_dict.DRINKS["Alcohol"]
+        self.alcohol_free = menu_dict.DRINKS["Alcohol free"]
+        self.breakfast = menu_dict.BREAKFAST
+        self.lunch = menu_dict.LUNCH
+        self.dinner = menu_dict.DINNER
+        self.vegan = menu_dict.SPECIAL_MENU["Vegan"]
+        self.vegetarian = menu_dict.SPECIAL_MENU["Vegetarian"]
 
     def show_food_menu(self) -> Dict[str, Union[float, int]]:
-        h.print_menu(submenu_name=self.vegetarian)
-        h.print_menu(submenu_name=self.vegan)
+        helpers.print_menu(submenu_name=self.vegetarian)
+        helpers.print_menu(submenu_name=self.vegan)
 
         if 12 < self.current_time < 18:
-            h.print_menu(submenu_name=self.lunch)
+            helpers.print_menu(submenu_name=self.lunch)
         if 12 > self.current_time:
-            h.print_menu(submenu_name=self.breakfast)
+            helpers.print_menu(submenu_name=self.breakfast)
         if 18 < self.current_time:
-            h.print_menu(submenu_name=self.dinner)
+            helpers.print_menu(submenu_name=self.dinner)
 
     def show_all_drinks(self) -> Dict[str, Union[float, int]]:
-        h.print_menu(submenu_name=self.alcohol)
-        h.print_menu(submenu_name=self.alcohol_free)
+        helpers.print_menu(submenu_name=self.alcohol)
+        helpers.print_menu(submenu_name=self.alcohol_free)
 
     def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
         if 12 < self.current_time < 18:
@@ -73,9 +73,9 @@ class Reservation:
 class Tables:
     def __init__(self) -> None:
         self.tables = {
-            "single": t.SINGLE_TABLES,
-            "double": t.DOUBLE_TABLES,
-            "family": t.FAMILY_TABLES,
+            "single": table_dict.SINGLE_TABLES,
+            "double": table_dict.DOUBLE_TABLES,
+            "family": table_dict.FAMILY_TABLES,
         }
         self.table_reservations: List[Reservation] = []
 
@@ -176,15 +176,15 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
         foods: Dict[str, int] = None,
     ) -> None:
-        if h.is_value_not_none(alcohol):
+        if helpers.is_value_not_none(alcohol):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol.update(alcohol)
-        if h.is_value_not_none(alcohol_free):
+        if helpers.is_value_not_none(alcohol_free):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol_free.update(alcohol_free)
-        if h.is_value_not_none(foods):
+        if helpers.is_value_not_none(foods):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.foods.update(foods)
@@ -192,13 +192,13 @@ class Orders:
     def remove_from_order(self, name: str, surname: str, item_to_remove: str) -> None:
         for order in self.orders:
             if order.name == name and order.surname == surname:
-                if item_to_remove in m.VALID_DRINKS:
+                if item_to_remove in menu_dict.VALID_DRINKS:
                     del order.alcohol_free[item_to_remove]
                     return
-                if item_to_remove in m.VALID_FOODS:
+                if item_to_remove in menu_dict.VALID_FOODS:
                     del order.foods[item_to_remove]
                     return
-                if item_to_remove in m.VALID_ALC_DRINKS:
+                if item_to_remove in menu_dict.VALID_ALC_DRINKS:
                     del order.alcohol[item_to_remove]
                     return
                 else:
@@ -212,7 +212,7 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
         foods: Dict[str, int] = None,
     ) -> None:
-        if h.is_value_not_none(alcohol):
+        if helpers.is_value_not_none(alcohol):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in alcohol.items():
@@ -223,7 +223,7 @@ class Orders:
                             order.alcohol[key] = value
                 else:
                     continue
-        if h.is_value_not_none(alcohol_free):
+        if helpers.is_value_not_none(alcohol_free):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in alcohol_free.items():
@@ -234,7 +234,7 @@ class Orders:
                             order.alcohol_free[key] = value
                 else:
                     continue
-        if h.is_value_not_none(foods):
+        if helpers.is_value_not_none(foods):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in foods.items():
@@ -243,7 +243,11 @@ class Orders:
                     continue
 
     def calculate_order_cost(self, name: str, surname: str) -> None:
-        full_menu = dict(m.VALID_ALC_DRINKS, **m.VALID_DRINKS, **m.VALID_FOODS)
+        full_menu = dict(
+            menu_dict.VALID_ALC_DRINKS,
+            **menu_dict.VALID_DRINKS,
+            **menu_dict.VALID_FOODS,
+        )
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 if order.alcohol == None:
