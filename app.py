@@ -1,4 +1,6 @@
-from classes import Menu, Tables, Order, Orders
+from menu_class import Menu
+from orders_classes import Order, Orders
+from tables_class import Reservation, Tables
 import helpers as helpers
 from datetime import datetime
 import menu as menu_dicts

@@ -1,131 +1,8 @@
+from dataclasses import dataclass, field
 from typing import Union, Dict, Optional, List
-import menu as menu_dict
-import tables as table_dict
 import helpers as helpers
-from datetime import datetime
-from dataclasses import dataclass
-
-
-@dataclass
-class Menu:
-    current_time = int(datetime.now().strftime("%H"))
-
-    alcohol = menu_dict.DRINKS["Alcohol"]
-    alcohol_free = menu_dict.DRINKS["Alcohol free"]
-    breakfast = menu_dict.BREAKFAST
-    lunch = menu_dict.LUNCH
-    dinner = menu_dict.DINNER
-    vegan = menu_dict.SPECIAL_MENU["Vegan"]
-    vegetarian = menu_dict.SPECIAL_MENU["Vegetarian"]
-
-    def show_food_menu(self) -> Dict[str, Union[float, int]]:
-        helpers.print_menu(submenu_name=self.vegetarian)
-        helpers.print_menu(submenu_name=self.vegan)
-
-        if 12 < self.current_time < 18:
-            helpers.print_menu(submenu_name=self.lunch)
-        if 12 > self.current_time:
-            helpers.print_menu(submenu_name=self.breakfast)
-        if 18 < self.current_time:
-            helpers.print_menu(submenu_name=self.dinner)
-
-    def show_all_drinks(self) -> Dict[str, Union[float, int]]:
-        helpers.print_menu(submenu_name=self.alcohol)
-        helpers.print_menu(submenu_name=self.alcohol_free)
-
-    def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
-        if 12 < self.current_time < 18:
-            return dict(
-                self.alcohol,
-                **self.alcohol_free,
-                **self.vegan,
-                **self.vegetarian,
-                **self.lunch,
-            )
-        if 12 > self.current_time:
-            return dict(
-                self.alcohol,
-                **self.alcohol_free,
-                **self.vegan,
-                **self.vegetarian,
-                **self.breakfast,
-            )
-        if 18 < self.current_time:
-            return dict(
-                self.alcohol,
-                **self.alcohol_free,
-                **self.vegan,
-                **self.vegetarian,
-                **self.dinner,
-            )
-
-
-@dataclass
-class Reservation:
-    name: str
-    surname: str
-    time: str
-    table_type: str
-    table_id: int
-
-
-@dataclass
-class Tables:
-    tables: Dict[str, Dict[int, str]] = {
-        "single": table_dict.SINGLE_TABLES,
-        "double": table_dict.DOUBLE_TABLES,
-        "family": table_dict.FAMILY_TABLES,
-    }
-    table_reservations: List[Reservation] = []
-
-    def check_reservation(self, name: str, surname: str) -> bool:
-        if self.table_reservations == None:
-            return False
-        for reservation in self.table_reservations:
-            if reservation.name == name and reservation.surname == surname:
-                return True
-
-    def check_if_table_free(self, table_type: str, table_id: int) -> bool:
-        if self.tables[table_type][table_id] == "free":
-            return True
-        return False
-
-    def reserve_table(
-        self, name: str, surname: str, time: str, table_type: str, table_id: int
-    ) -> Optional[str]:
-        if self.check_if_table_free(table_type=table_type, table_id=table_id):
-            reservation = Reservation(
-                name=name,
-                surname=surname,
-                time=time,
-                table_type=table_type,
-                table_id=table_id,
-            )
-            self.table_reservations.append(reservation)
-            self.tables[table_type][table_id] = "reserved"
-        else:
-            return f"Table is already reserved"
-
-    def show_free_tables(self) -> None:
-        for key, value in self.tables.items():
-            for table_id, table_state in value.items():
-                if table_state == "free":
-                    print(f"{key}: {table_id} is {table_state}")
-
-    def show_reserved_tables(self) -> str:
-        for key, value in self.tables.items():
-            for table_id, table_state in value.items():
-                if table_state == "reserved":
-                    print(f"{key}: {table_id} is {table_state}")
-
-    def show_reservation(self, name: str, surname: str) -> str:
-        if self.table_reservations == None:
-            return f"We are sorry, reservation was not found"
-        for reservation in self.table_reservations:
-            if reservation.name == name and reservation.surname == surname:
-                return f"{name} {surname} reserved a {reservation.table_type} type table for {reservation.time} o'clock"
-            else:
-                return f"We are sorry, reservation was not found"
+import menu as menu_dict
+from menu_class import Menu
 
 
 @dataclass
@@ -141,7 +18,7 @@ class Order:
 
 @dataclass
 class Orders:
-    orders: List[Order] = []
+    orders: List[Order] = field(default_factory=list)
 
     def make_order(
         self,
@@ -293,11 +170,3 @@ class Orders:
                         order.prep_time += (
                             int(menu[key]["prep.time"].replace("min", "")) * value
                         )
-
-
-# class Payment:
-#     def __init__(self) -> None:
-#         pass
-
-#     def add_tips(self) -> float:
-#         pass
