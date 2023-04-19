@@ -14,14 +14,13 @@ class Reservation:
 
 @dataclass
 class Tables:
-    tables: Dict[str, Dict[int, str]] = field(
-        default={
-            "single": table_dict.SINGLE_TABLES,
-            "double": table_dict.DOUBLE_TABLES,
-            "family": table_dict.FAMILY_TABLES,
-        }
-    )
-    table_reservations: List[Reservation] = []
+    tables = {
+        "single": table_dict.SINGLE_TABLES,
+        "double": table_dict.DOUBLE_TABLES,
+        "family": table_dict.FAMILY_TABLES,
+    }
+
+    table_reservations: List[Reservation] = field(default_factory=list)
 
     def check_reservation(self, name: str, surname: str) -> bool:
         if self.table_reservations == None:

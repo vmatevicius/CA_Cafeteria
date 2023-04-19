@@ -8,7 +8,6 @@ import helpers as helpers
 @dataclass
 class Menu:
     current_time = int(datetime.now().strftime("%H"))
-
     alcohol = menu_dict.DRINKS["Alcohol"]
     alcohol_free = menu_dict.DRINKS["Alcohol free"]
     breakfast = menu_dict.BREAKFAST
