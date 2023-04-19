@@ -3,19 +3,20 @@ import menu as menu_dict
 import tables as table_dict
 import helpers as helpers
 from datetime import datetime
+from dataclasses import dataclass
 
 
+@dataclass
 class Menu:
     current_time = int(datetime.now().strftime("%H"))
 
-    def __init__(self) -> None:
-        self.alcohol = menu_dict.DRINKS["Alcohol"]
-        self.alcohol_free = menu_dict.DRINKS["Alcohol free"]
-        self.breakfast = menu_dict.BREAKFAST
-        self.lunch = menu_dict.LUNCH
-        self.dinner = menu_dict.DINNER
-        self.vegan = menu_dict.SPECIAL_MENU["Vegan"]
-        self.vegetarian = menu_dict.SPECIAL_MENU["Vegetarian"]
+    alcohol = menu_dict.DRINKS["Alcohol"]
+    alcohol_free = menu_dict.DRINKS["Alcohol free"]
+    breakfast = menu_dict.BREAKFAST
+    lunch = menu_dict.LUNCH
+    dinner = menu_dict.DINNER
+    vegan = menu_dict.SPECIAL_MENU["Vegan"]
+    vegetarian = menu_dict.SPECIAL_MENU["Vegetarian"]
 
     def show_food_menu(self) -> Dict[str, Union[float, int]]:
         helpers.print_menu(submenu_name=self.vegetarian)
@@ -59,25 +60,23 @@ class Menu:
             )
 
 
+@dataclass
 class Reservation:
-    def __init__(
-        self, name: str, surname: str, time: str, table_type: str, table_id: int
-    ) -> None:
-        self.name = name
-        self.surname = surname
-        self.time = time
-        self.table_type = table_type
-        self.table_id = table_id
+    name: str
+    surname: str
+    time: str
+    table_type: str
+    table_id: int
 
 
+@dataclass
 class Tables:
-    def __init__(self) -> None:
-        self.tables = {
-            "single": table_dict.SINGLE_TABLES,
-            "double": table_dict.DOUBLE_TABLES,
-            "family": table_dict.FAMILY_TABLES,
-        }
-        self.table_reservations: List[Reservation] = []
+    tables: Dict[str, Dict[int, str]] = {
+        "single": table_dict.SINGLE_TABLES,
+        "double": table_dict.DOUBLE_TABLES,
+        "family": table_dict.FAMILY_TABLES,
+    }
+    table_reservations: List[Reservation] = []
 
     def check_reservation(self, name: str, surname: str) -> bool:
         if self.table_reservations == None:
@@ -129,29 +128,20 @@ class Tables:
                 return f"We are sorry, reservation was not found"
 
 
+@dataclass
 class Order:
-    def __init__(
-        self,
-        name: str,
-        surname: str,
-        foods: Dict[str, int],
-        alcohol: Dict[str, int] = None,
-        alcohol_free: Dict[str, int] = None,
-        total_cost: Union[int, float] = 0,
-        prep_time: int = 0,
-    ) -> None:
-        self.name = name
-        self.surname = surname
-        self.foods = foods
-        self.alcohol = alcohol
-        self.alcohol_free = alcohol_free
-        self.total_cost = total_cost
-        self.prep_time = prep_time
+    name: str
+    surname: str
+    foods: Dict[str, int]
+    alcohol: Dict[str, int] = None
+    alcohol_free: Dict[str, int] = None
+    total_cost: Union[int, float] = 0
+    prep_time: int = 0
 
 
+@dataclass
 class Orders:
-    def __init__(self) -> None:
-        self.orders: List[Orders] = []
+    orders: List[Order] = []
 
     def make_order(
         self,
