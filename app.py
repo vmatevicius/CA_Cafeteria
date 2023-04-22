@@ -13,62 +13,64 @@ orders = Orders()
 
 current_time = datetime.now().strftime("%H:%M")
 
+name = "alpha"
+surname = "male"
 print("Welcome to our cafetera!")
-user_answer = res_utils.is_reservation_made()
+# user_answer = res_utils.is_reservation_made()
 
-if helpers.identify_input(user_answer):
-    print(
-        "We are sorry, but we have no reservations yet, there must have been an error"
-    )
-    user_answer = res_utils.handle_new_reservation()
-    if helpers.identify_input(user_answer):
-        print("Here are our free tables at the moment:")
-        print("Choose the table you want from the free tables list:")
-        tables.show_free_tables()
-        print("We will need some information to make a new reservation")
-        (
-            name,
-            surname,
-            table_type,
-            table_id,
-            time,
-        ) = res_utils.get_reservation_info()
-        tables.reserve_table(
-            name=name,
-            surname=surname,
-            table_type=table_type,
-            table_id=table_id,
-            time=time,
-        )
-        print(tables.show_reservation(name=name, surname=surname))
-    else:
-        print("Have a nice day then!")
+# if helpers.identify_input(user_answer):
+#     print(
+#         "We are sorry, but we have no reservations yet, there must have been an error"
+#     )
+#     user_answer = res_utils.handle_new_reservation()
+#     if helpers.identify_input(user_answer):
+#         print("Here are our free tables at the moment:")
+#         print("Choose the table you want from the free tables list:")
+#         tables.show_free_tables()
+#         print("We will need some information to make a new reservation")
+#         (
+#             name,
+#             surname,
+#             table_type,
+#             table_id,
+#             time,
+#         ) = res_utils.get_reservation_info()
+#         tables.reserve_table(
+#             name=name,
+#             surname=surname,
+#             table_type=table_type,
+#             table_id=table_id,
+#             time=time,
+#         )
+#         print(tables.show_reservation(name=name, surname=surname))
+#     else:
+#         print("Have a nice day then!")
 
-else:
-    user_answer = res_utils.handle_new_reservation()
-    if helpers.identify_input(user_answer):
-        print("Here are our free tables at the moment:")
-        print("Choose the table you want from the free tables list:")
-        tables.show_free_tables()
-        print("We will need some information to make a new reservation")
-        (
-            name,
-            surname,
-            table_type,
-            table_id,
-            time,
-        ) = res_utils.get_reservation_info()
-        tables.reserve_table(
-            name=name,
-            surname=surname,
-            table_type=table_type,
-            table_id=table_id,
-            time=time,
-        )
-        print(tables.show_reservation(name=name, surname=surname))
+# else:
+#     user_answer = res_utils.handle_new_reservation()
+#     if helpers.identify_input(user_answer):
+#         print("Here are our free tables at the moment:")
+#         print("Choose the table you want from the free tables list:")
+#         tables.show_free_tables()
+#         print("We will need some information to make a new reservation")
+#         (
+#             name,
+#             surname,
+#             table_type,
+#             table_id,
+#             time,
+#         ) = res_utils.get_reservation_info()
+#         tables.reserve_table(
+#             name=name,
+#             surname=surname,
+#             table_type=table_type,
+#             table_id=table_id,
+#             time=time,
+#         )
+#         print(tables.show_reservation(name=name, surname=surname))
 
-    else:
-        print("Have a nice day then!")
+#     else:
+#         print("Have a nice day then!")
 
 
 user_answer = ord_utils.handle_order_now()
@@ -87,8 +89,8 @@ if helpers.identify_input(user_answer):
         else:
             continue
 
-    user_answer = ord_utils.handle_drink_orders()
-    if helpers.identify_input(user_answer):
+    user_input = ord_utils.handle_drink_orders()
+    if helpers.identify_input(user_input):
         print("Here is our drinks menu: ")
         menu.show_all_drinks()
         alcohol = {}
@@ -125,15 +127,7 @@ if helpers.identify_input(user_answer):
 
         orders.show_order_summarized(name=name, surname=surname)
     else:
-        alcohol = None
-        alc_free = None
-        orders.make_order(
-            name=name,
-            surname=surname,
-            foods=foods,
-            alcohol=alcohol,
-            alcohol_free=alc_free,
-        )
+        orders.make_order(name=name, surname=surname, foods=foods)
         orders.show_order_summarized(name=name, surname=surname)
 else:
     ord_utils.is_ready_to_order()
@@ -150,8 +144,8 @@ else:
         else:
             continue
 
-    user_answer = ord_utils.handle_drink_orders()
-    if helpers.identify_input(user_answer):
+    user_input = ord_utils.handle_drink_orders()
+    if helpers.identify_input(user_input):
         print("Here is our drinks menu: ")
         menu.show_all_drinks()
         alcohol = {}
@@ -198,3 +192,15 @@ else:
             alcohol_free=alc_free,
         )
         orders.show_order_summarized(name=name, surname=surname)
+
+    # while True:
+    #     user_answer = (
+    #         input("If you need anything else type 'call' without quotes: ")
+    #         .strip()
+    #         .lower()
+    #     )
+    #     if user_answer != "call":
+    #         print("You must type word 'call'!!")
+    #         continue
+    #     else:
+    #         break

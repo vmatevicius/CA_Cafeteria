@@ -34,6 +34,8 @@ class Orders:
             self.orders.append(Order(name, surname, foods, alcohol))
         if alcohol_free != None and alcohol == None:
             self.orders.append(Order(name, surname, foods, alcohol_free))
+        if alcohol_free == None and alcohol == None:
+            self.orders.append(Order(name, surname, foods))
 
     def update_order_quantities(
         self,
@@ -117,24 +119,24 @@ class Orders:
         )
         for order in self.orders:
             if order.name == name and order.surname == surname:
-                if order.alcohol == None:
-                    full_order = dict(order.foods, **order.alcohol_free)
-                if order.alcohol_free == None:
-                    full_order = dict(order.foods, **order.alcohol)
-                if order.alcohol_free and order.alcohol == None:
+                if order.alcohol_free == None and order.alcohol == None:
                     full_order = dict(order.foods)
+                elif order.alcohol == None:
+                    full_order = dict(order.foods, **order.alcohol_free)
+                elif order.alcohol_free == None:
+                    full_order = dict(order.foods, **order.alcohol)
                 for key in full_order.keys():
                     order.total_cost += full_menu[key] * full_order[key]
 
     def show_order_summarized(self, name: str, surname: str) -> None:
         for order in self.orders:
             if order.name == name and order.surname == surname:
-                if order.alcohol == None:
-                    full_order = dict(order.foods, **order.alcohol_free)
-                if order.alcohol_free == None:
-                    full_order = dict(order.foods, **order.alcohol)
-                if order.alcohol_free and order.alcohol == None:
+                if order.alcohol_free == None and order.alcohol == None:
                     full_order = dict(order.foods)
+                elif order.alcohol == None:
+                    full_order = dict(order.foods, **order.alcohol_free)
+                elif order.alcohol_free == None:
+                    full_order = dict(order.foods, **order.alcohol)
                 self.calculate_order_cost(name, surname)
                 self.calculate_prep_time(name, surname)
                 print(f"Total cost is {self.get_order_cost(name, surname)} dollars")

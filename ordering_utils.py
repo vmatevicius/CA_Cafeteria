@@ -59,6 +59,7 @@ def handle_drink_orders() -> str:
         )
         if user_answer != "yes" and user_answer != "no":
             print("You must type yes or no")
+            continue
         else:
             return user_answer
 
