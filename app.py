@@ -196,10 +196,19 @@ user_answer = ord_utils.handle_call_waiter()
 if user_answer:
     user_request = ord_utils.handle_customer_request()
     if user_request == "paycheck":
+        # ADD RECEIPT LOGGING
+        # ADD RECEIPT LOGGING
+        # ADD RECEIPT LOGGING
+        # ADD RECEIPT LOGGING
         if ord_utils.handle_tips_request():
             tip_percentage = ord_utils.handle_tip_percentage()
             order_cost = orders.get_order_cost(name=name, surname=surname)
             full_cost = order_cost / 100 * tip_percentage + order_cost
             print(f"The full cost of your order is {full_cost}")
             if ord_utils.handle_payment(full_cost):
+                print("Thank you, have a nice day!")
+        else:
+            order_cost = orders.get_order_cost(name=name, surname=surname)
+            print(f"The full cost of your order is {order_cost}")
+            if ord_utils.handle_payment(order_cost):
                 print("Thank you, have a nice day!")

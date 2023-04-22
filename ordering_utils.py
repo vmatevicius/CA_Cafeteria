@@ -193,5 +193,5 @@ def handle_payment(full_price) -> bool:
             else:
                 return True
         except ValueError:
-            print("Input must be a float")
+            print("Input must be a number")
             continue
