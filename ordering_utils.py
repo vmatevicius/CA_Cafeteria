@@ -126,3 +126,72 @@ def is_ready_to_order() -> str:
             print("You must type word 'ready' when you are ready to order")
         else:
             break
+
+
+def handle_call_waiter() -> bool:
+    while True:
+        user_answer = (
+            input("If you need anything else type 'call' without quotes: ")
+            .strip()
+            .lower()
+        )
+        if user_answer != "call":
+            print("You must type word 'call'!!")
+            continue
+        else:
+            return True
+
+
+def handle_customer_request() -> str:
+    while True:
+        user_input = (
+            input("How can I help you?(Choose one: paycheck/add/update): ")
+            .strip()
+            .lower()
+        )
+        valid_answers = ["paycheck", "add", "update"]
+        if user_input not in valid_answers:
+            print("Wrong input, please repeat")
+            continue
+        else:
+            return user_input
+
+
+def handle_tips_request() -> bool:
+    while True:
+        user_answer = input("Do you want to leave tips?(Type Yes/No): ").strip().lower()
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False
+
+
+def handle_tip_percentage() -> int:
+    while True:
+        try:
+            user_answer = int(
+                input(
+                    "What percent you want to add to paycheck?(Must type a whole number): "
+                )
+            )
+            return user_answer
+        except ValueError:
+            print("Input must be an integer")
+            continue
+
+
+def handle_payment(full_price) -> bool:
+    while True:
+        try:
+            user_input = float(input("Enter amount to pay: ").strip())
+            if user_input != full_price:
+                print("Are you broke or something?")
+            else:
+                return True
+        except ValueError:
+            print("Input must be a float")
+            continue

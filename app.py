@@ -13,64 +13,62 @@ orders = Orders()
 
 current_time = datetime.now().strftime("%H:%M")
 
-name = "alpha"
-surname = "male"
 print("Welcome to our cafetera!")
-# user_answer = res_utils.is_reservation_made()
+user_answer = res_utils.is_reservation_made()
 
-# if helpers.identify_input(user_answer):
-#     print(
-#         "We are sorry, but we have no reservations yet, there must have been an error"
-#     )
-#     user_answer = res_utils.handle_new_reservation()
-#     if helpers.identify_input(user_answer):
-#         print("Here are our free tables at the moment:")
-#         print("Choose the table you want from the free tables list:")
-#         tables.show_free_tables()
-#         print("We will need some information to make a new reservation")
-#         (
-#             name,
-#             surname,
-#             table_type,
-#             table_id,
-#             time,
-#         ) = res_utils.get_reservation_info()
-#         tables.reserve_table(
-#             name=name,
-#             surname=surname,
-#             table_type=table_type,
-#             table_id=table_id,
-#             time=time,
-#         )
-#         print(tables.show_reservation(name=name, surname=surname))
-#     else:
-#         print("Have a nice day then!")
+if helpers.identify_input(user_answer):
+    print(
+        "We are sorry, but we have no reservations yet, there must have been an error"
+    )
+    user_answer = res_utils.handle_new_reservation()
+    if helpers.identify_input(user_answer):
+        print("Here are our free tables at the moment:")
+        print("Choose the table you want from the free tables list:")
+        tables.show_free_tables()
+        print("We will need some information to make a new reservation")
+        (
+            name,
+            surname,
+            table_type,
+            table_id,
+            time,
+        ) = res_utils.get_reservation_info()
+        tables.reserve_table(
+            name=name,
+            surname=surname,
+            table_type=table_type,
+            table_id=table_id,
+            time=time,
+        )
+        print(tables.show_reservation(name=name, surname=surname))
+    else:
+        print("Have a nice day then!")
 
-# else:
-#     user_answer = res_utils.handle_new_reservation()
-#     if helpers.identify_input(user_answer):
-#         print("Here are our free tables at the moment:")
-#         print("Choose the table you want from the free tables list:")
-#         tables.show_free_tables()
-#         print("We will need some information to make a new reservation")
-#         (
-#             name,
-#             surname,
-#             table_type,
-#             table_id,
-#             time,
-#         ) = res_utils.get_reservation_info()
-#         tables.reserve_table(
-#             name=name,
-#             surname=surname,
-#             table_type=table_type,
-#             table_id=table_id,
-#             time=time,
-#         )
-#         print(tables.show_reservation(name=name, surname=surname))
+else:
+    user_answer = res_utils.handle_new_reservation()
+    if helpers.identify_input(user_answer):
+        print("Here are our free tables at the moment:")
+        print("Choose the table you want from the free tables list:")
+        tables.show_free_tables()
+        print("We will need some information to make a new reservation")
+        (
+            name,
+            surname,
+            table_type,
+            table_id,
+            time,
+        ) = res_utils.get_reservation_info()
+        tables.reserve_table(
+            name=name,
+            surname=surname,
+            table_type=table_type,
+            table_id=table_id,
+            time=time,
+        )
+        print(tables.show_reservation(name=name, surname=surname))
 
-#     else:
-#         print("Have a nice day then!")
+    else:
+        print("Have a nice day then!")
 
 
 user_answer = ord_utils.handle_order_now()
@@ -193,14 +191,15 @@ else:
         )
         orders.show_order_summarized(name=name, surname=surname)
 
-    # while True:
-    #     user_answer = (
-    #         input("If you need anything else type 'call' without quotes: ")
-    #         .strip()
-    #         .lower()
-    #     )
-    #     if user_answer != "call":
-    #         print("You must type word 'call'!!")
-    #         continue
-    #     else:
-    #         break
+user_answer = ord_utils.handle_call_waiter()
+
+if user_answer:
+    user_request = ord_utils.handle_customer_request()
+    if user_request == "paycheck":
+        if ord_utils.handle_tips_request():
+            tip_percentage = ord_utils.handle_tip_percentage()
+            order_cost = orders.get_order_cost(name=name, surname=surname)
+            full_cost = order_cost / 100 * tip_percentage + order_cost
+            print(f"The full cost of your order is {full_cost}")
+            if ord_utils.handle_payment(full_cost):
+                print("Thank you, have a nice day!")
