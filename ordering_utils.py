@@ -195,3 +195,17 @@ def handle_payment(full_price) -> bool:
         except ValueError:
             print("Input must be a number")
             continue
+
+
+def handle_add_request() -> str:
+    while True:
+        user_answer = (
+            input("What would you like to add? (Choose from drinks/food): ")
+            .strip()
+            .lower()
+        )
+        if user_answer != "drinks" and user_answer != "food":
+            print("Wrong input! Try again")
+            continue
+        else:
+            return user_answer

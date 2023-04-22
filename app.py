@@ -80,7 +80,10 @@ if helpers.identify_input(user_answer):
     while True:
         food = ord_utils.get_valid_meal_order()
         quantity = ord_utils.get_valid_meal_quantity()
-        foods[food] = quantity
+        if food in foods.keys():
+            foods[food] += quantity
+        else:
+            foods[food] = quantity
         user_answer = ord_utils.handle_extra_meal_order()
         if user_answer == "no":
             break
@@ -97,9 +100,15 @@ if helpers.identify_input(user_answer):
             drink = ord_utils.get_valid_drink_order()
             quantity = ord_utils.get_valid_drink_quantity()
             if drink in menu_dicts.VALID_ALC_DRINKS:
-                alcohol[drink] = quantity
+                if drink in alcohol.keys():
+                    alcohol[drink] += quantity
+                else:
+                    alcohol[drink] = quantity
             else:
-                alc_free[drink] = quantity
+                if drink in alc_free.keys():
+                    alc_free[drink] += quantity
+                else:
+                    alc_free[drink] = quantity
 
             user_answer = ord_utils.handle_extra_drink_order()
             if user_answer == "no":
@@ -122,7 +131,6 @@ if helpers.identify_input(user_answer):
             alcohol=alcohol,
             alcohol_free=alc_free,
         )
-
         orders.show_order_summarized(name=name, surname=surname)
     else:
         orders.make_order(name=name, surname=surname, foods=foods)
@@ -135,7 +143,10 @@ else:
     while True:
         food = ord_utils.get_valid_meal_order()
         quantity = ord_utils.get_valid_meal_quantity()
-        foods[food] = quantity
+        if food in foods.keys():
+            foods[food] += quantity
+        else:
+            foods[food] = quantity
         user_answer = ord_utils.handle_extra_meal_order()
         if user_answer == "no":
             break
@@ -152,9 +163,15 @@ else:
             drink = ord_utils.get_valid_drink_order()
             quantity = ord_utils.get_valid_drink_quantity()
             if drink in menu_dicts.VALID_ALC_DRINKS:
-                alcohol[drink] = quantity
+                if drink in alcohol.keys():
+                    alcohol[drink] += quantity
+                else:
+                    alcohol[drink] = quantity
             else:
-                alc_free[drink] = quantity
+                if drink in alc_free.keys():
+                    alc_free[drink] += quantity
+                else:
+                    alc_free[drink] = quantity
 
             user_answer = ord_utils.handle_extra_drink_order()
             if user_answer == "no":
@@ -212,3 +229,63 @@ if user_answer:
             print(f"The full cost of your order is {order_cost}")
             if ord_utils.handle_payment(order_cost):
                 print("Thank you, have a nice day!")
+    elif user_request == "add":
+        user_input = ord_utils.handle_add_request()
+        if user_input == "food":
+            print("Here is our food menu:")
+            menu.show_food_menu()
+            foods = {}
+            while True:
+                food = ord_utils.get_valid_meal_order()
+                quantity = ord_utils.get_valid_meal_quantity()
+                if food in foods.keys():
+                    foods[food] += quantity
+                else:
+                    foods[food] = quantity
+                user_answer = ord_utils.handle_extra_meal_order()
+                if user_answer == "no":
+                    break
+                else:
+                    continue
+            orders.add_to_order(name=name, surname=surname, foods=foods)
+            orders.show_order_summarized(name=name, surname=surname)
+        else:
+            print("Here is our drinks menu: ")
+            menu.show_all_drinks()
+            alcohol = {}
+            alc_free = {}
+            while True:
+                drink = ord_utils.get_valid_drink_order()
+                quantity = ord_utils.get_valid_drink_quantity()
+                if drink in menu_dicts.VALID_ALC_DRINKS:
+                    if drink in alcohol.keys():
+                        alcohol[drink] += quantity
+                    else:
+                        alcohol[drink] = quantity
+                else:
+                    if drink in alc_free.keys():
+                        alc_free[drink] += quantity
+                    else:
+                        alc_free[drink] = quantity
+
+                user_answer = ord_utils.handle_extra_drink_order()
+                if user_answer == "no":
+                    break
+                else:
+                    continue
+            if alcohol:
+                pass
+            else:
+                alcohol = None
+            if alc_free:
+                pass
+            else:
+                alc_free = None
+
+            orders.add_to_order(
+                name=name, surname=surname, alcohol=alcohol, alcohol_free=alc_free
+            )
+            orders.show_order_summarized(name=name, surname=surname)
+    elif user_answer == "update":
+        pass
+        # implement this

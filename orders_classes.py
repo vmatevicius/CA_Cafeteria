@@ -12,8 +12,6 @@ class Order:
     foods: Dict[str, int]
     alcohol: Dict[str, int] = None
     alcohol_free: Dict[str, int] = None
-    total_cost: Union[int, float] = 0
-    prep_time: int = 0
 
 
 @dataclass
@@ -89,7 +87,10 @@ class Orders:
                             order.alcohol = {}
                             order.alcohol[key] = value
                         else:
-                            order.alcohol[key] = value
+                            if order.alcohol[key] == alcohol[key]:
+                                order.alcohol[key] += value
+                            else:
+                                order.alcohol[key] = value
                 else:
                     continue
         if helpers.is_value_not_none(alcohol_free):
@@ -99,6 +100,8 @@ class Orders:
                         if order.alcohol_free == None:
                             order.alcohol_free = {}
                             order.alcohol_free[key] = value
+                        if order.alcohol_free[key] == alcohol_free[key]:
+                            order.alcohol_free[key] += value
                         else:
                             order.alcohol_free[key] = value
                 else:
@@ -107,7 +110,10 @@ class Orders:
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in foods.items():
-                        order.foods[key] = value
+                        if order.foods[key] == foods[key]:
+                            order.foods[key] += value
+                        else:
+                            order.foods[key] += value
                 else:
                     continue
 
@@ -117,6 +123,7 @@ class Orders:
             **menu_dict.VALID_DRINKS,
             **menu_dict.VALID_FOODS,
         )
+        order_cost = 0
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 if order.alcohol_free == None and order.alcohol == None:
@@ -125,8 +132,13 @@ class Orders:
                     full_order = dict(order.foods, **order.alcohol_free)
                 elif order.alcohol_free == None:
                     full_order = dict(order.foods, **order.alcohol)
+                else:
+                    full_order = dict(
+                        order.foods, **order.alcohol, **order.alcohol_free
+                    )
                 for key in full_order.keys():
-                    order.total_cost += full_menu[key] * full_order[key]
+                    order_cost += full_menu[key] * full_order[key]
+        return order_cost
 
     def show_order_summarized(self, name: str, surname: str) -> None:
         for order in self.orders:
@@ -137,38 +149,37 @@ class Orders:
                     full_order = dict(order.foods, **order.alcohol_free)
                 elif order.alcohol_free == None:
                     full_order = dict(order.foods, **order.alcohol)
-                self.calculate_order_cost(name, surname)
-                self.calculate_prep_time(name, surname)
-                print(f"Total cost is {self.get_order_cost(name, surname)} dollars")
+                else:
+                    full_order = dict(
+                        order.foods, **order.alcohol, **order.alcohol_free
+                    )
+                order_cost = self.calculate_order_cost(name=name, surname=surname)
+                order_prep_time = self.calculate_prep_time(name=name, surname=surname)
+                print(f"Total cost is {order_cost} dollars")
                 print("Your order is :")
                 for key, value in full_order.items():
                     print(f"{key}, quantity: {value}")
-                print(f"Total preparation time will be around {order.prep_time} mins")
-
-    def get_order_cost(self, name: str, surname: str) -> Union[int, float]:
-        for order in self.orders:
-            if order.name == name and order.surname == surname:
-                return order.total_cost
+                print(f"Total preparation time will be around {order_prep_time} mins")
 
     def calculate_prep_time(self, name: str, surname: str) -> None:
         menu = Menu().get_menu()
+        prep_time = 0
         for order in self.orders:
             if order.name == name and order.surname == surname:
                 for key, value in order.foods.items():
-                    order.prep_time += (
-                        int(menu[key]["prep.time"].replace("min", "")) * value
-                    )
+                    prep_time += int(menu[key]["prep.time"].replace("min", "")) * value
                 if order.alcohol == None:
                     pass
                 else:
                     for key, value in order.alcohol.items():
-                        order.prep_time += (
+                        prep_time += (
                             int(menu[key]["prep.time"].replace("min", "")) * value
                         )
                 if order.alcohol_free == None:
                     pass
                 else:
                     for key, value in order.alcohol_free.items():
-                        order.prep_time += (
+                        prep_time += (
                             int(menu[key]["prep.time"].replace("min", "")) * value
                         )
+        return prep_time
