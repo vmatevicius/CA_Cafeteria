@@ -25,6 +25,7 @@ def get_valid_meal_order() -> str:
         if check_if_food_valid(food):
             return food
         else:
+            print("Wrong name")
             continue
 
 
@@ -74,6 +75,7 @@ def get_valid_drink_order() -> str:
         if check_if_drink_valid(drink):
             return drink
         else:
+            print("Wrong name")
             continue
 
 
@@ -209,3 +211,75 @@ def handle_add_request() -> str:
             continue
         else:
             return user_answer
+
+
+def handle_add_drinks() -> bool:
+    while True:
+        user_answer = (
+            input("Do you want to add drinks too?(Type Yes/No): ").strip().lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False
+
+
+def handle_add_food() -> bool:
+    while True:
+        user_answer = (
+            input("Do you want to add meals too?(Type Yes/No): ").strip().lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False
+
+
+def handle_update_request() -> str:
+    while True:
+        user_answer = (
+            input("What would you like to update? (Choose from drinks/food): ")
+            .strip()
+            .lower()
+        )
+        if user_answer != "drinks" and user_answer != "food":
+            print("Wrong input! Try again")
+            continue
+        else:
+            return user_answer
+
+
+def handle_drink_update() -> str:
+    while True:
+        user_answer = (
+            input("What drink would you like to update?(Type one name at the time): ")
+            .strip()
+            .capitalize()
+        )
+        if check_if_drink_valid(user_answer):
+            return user_answer
+        else:
+            print("Wrong name")
+            continue
+
+
+def handle_food_update() -> str:
+    while True:
+        user_answer = (
+            input("What meal would you like to update?(Type one name at the time): ")
+            .strip()
+            .capitalize()
+        )
+        if check_if_food_valid(user_answer):
+            return user_answer
+        else:
+            print("Wrong name")
+            continue

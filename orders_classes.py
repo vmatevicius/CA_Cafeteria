@@ -27,11 +27,13 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
     ) -> None:
         if alcohol != None and alcohol_free != None:
-            self.orders.append(Order(name, surname, foods, alcohol, alcohol_free))
+            self.orders.append(
+                Order(name, surname, foods, alcohol=alcohol, alcohol_free=alcohol_free)
+            )
         if alcohol != None and alcohol_free == None:
-            self.orders.append(Order(name, surname, foods, alcohol))
+            self.orders.append(Order(name, surname, foods, alcohol=alcohol))
         if alcohol_free != None and alcohol == None:
-            self.orders.append(Order(name, surname, foods, alcohol_free))
+            self.orders.append(Order(name, surname, foods, alcohol_free=alcohol_free))
         if alcohol_free == None and alcohol == None:
             self.orders.append(Order(name, surname, foods))
 
@@ -87,7 +89,7 @@ class Orders:
                             order.alcohol = {}
                             order.alcohol[key] = value
                         else:
-                            if order.alcohol[key] == alcohol[key]:
+                            if key in order.alcohol.keys():
                                 order.alcohol[key] += value
                             else:
                                 order.alcohol[key] = value
@@ -100,20 +102,21 @@ class Orders:
                         if order.alcohol_free == None:
                             order.alcohol_free = {}
                             order.alcohol_free[key] = value
-                        if order.alcohol_free[key] == alcohol_free[key]:
-                            order.alcohol_free[key] += value
                         else:
-                            order.alcohol_free[key] = value
+                            if key in order.alcohol_free.keys():
+                                order.alcohol_free[key] += value
+                            else:
+                                order.alcohol_free[key] = value
                 else:
                     continue
         if helpers.is_value_not_none(foods):
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     for key, value in foods.items():
-                        if order.foods[key] == foods[key]:
+                        if key in order.foods.keys():
                             order.foods[key] += value
                         else:
-                            order.foods[key] += value
+                            order.foods[key] = value
                 else:
                     continue
 
