@@ -341,3 +341,16 @@ def handle_update_drinks() -> bool:
     if user_answer == "yes":
         return True
     return False
+
+
+def handle_paycheck_request() -> bool:
+    while True:
+        user_answer = input("Are you ready to pay?(Yes/No): ").strip().lower()
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False
