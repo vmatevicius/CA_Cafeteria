@@ -32,7 +32,7 @@ class Menu:
         helpers.print_menu(submenu_name=self.alcohol_free)
 
     def get_menu(self) -> Dict[str, Dict[str, Dict[str, Union[int, float, str]]]]:
-        if 12 < self.current_time < 18:
+        if 12 <= self.current_time < 18:
             return dict(
                 self.alcohol,
                 **self.alcohol_free,
@@ -48,7 +48,7 @@ class Menu:
                 **self.vegetarian,
                 **self.breakfast,
             )
-        if 18 < self.current_time:
+        if 18 <= self.current_time:
             return dict(
                 self.alcohol,
                 **self.alcohol_free,

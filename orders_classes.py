@@ -45,18 +45,24 @@ class Orders:
         alcohol_free: Dict[str, int] = None,
         foods: Dict[str, int] = None,
     ) -> None:
-        if helpers.is_value_not_none(alcohol):
+        if alcohol:
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol.update(alcohol)
-        if helpers.is_value_not_none(alcohol_free):
+        else:
+            pass
+        if alcohol_free:
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.alcohol_free.update(alcohol_free)
-        if helpers.is_value_not_none(foods):
+        else:
+            pass
+        if foods:
             for order in self.orders:
                 if order.name == name and order.surname == surname:
                     order.foods.update(foods)
+        else:
+            pass
 
     def remove_from_order(self, name: str, surname: str, item_to_remove: str) -> None:
         for order in self.orders:
@@ -186,3 +192,21 @@ class Orders:
                             int(menu[key]["prep.time"].replace("min", "")) * value
                         )
         return prep_time
+
+    def show_order(self, name: str, surname: str) -> Dict:
+        for order in self.orders:
+            if order.name == name and order.surname == surname:
+                if order.alcohol_free == None and order.alcohol == None:
+                    full_order = dict(order.foods)
+                elif order.alcohol == None:
+                    full_order = dict(order.foods, **order.alcohol_free)
+                elif order.alcohol_free == None:
+                    full_order = dict(order.foods, **order.alcohol)
+                else:
+                    full_order = dict(
+                        order.foods, **order.alcohol, **order.alcohol_free
+                    )
+                for key, value in full_order.items():
+                    print(f"Ordered item {key}, amount {value}")
+
+        return full_order

@@ -283,3 +283,61 @@ def handle_food_update() -> str:
         else:
             print("Wrong name")
             continue
+
+
+def handle_extra_drink_update() -> str:
+    while True:
+        user_answer = (
+            input("Do you want to update anything else from ordered drinks?(Yes/No): ")
+            .strip()
+            .lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            return user_answer
+
+
+def handle_extra_food_update() -> str:
+    while True:
+        user_answer = (
+            input("Do you want to update anything else from ordered foods?(Yes/No): ")
+            .strip()
+            .lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            return user_answer
+
+
+def handle_update_meals() -> bool:
+    while True:
+        user_answer = (
+            input("Do you want to update meals too?(Type Yes/No): ").strip().lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False
+
+
+def handle_update_drinks() -> bool:
+    while True:
+        user_answer = (
+            input("Do you want to update drinks too?(Type Yes/No): ").strip().lower()
+        )
+        if user_answer != "yes" and user_answer != "no":
+            print("You must type yes or no")
+            continue
+        else:
+            break
+    if user_answer == "yes":
+        return True
+    return False

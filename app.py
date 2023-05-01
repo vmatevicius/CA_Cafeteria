@@ -345,13 +345,118 @@ if user_answer:
                 orders.show_order_summarized(name=name, surname=surname)
             else:
                 orders.show_order_summarized(name=name, surname=surname)
-    elif user_answer == "update":
+    else:
         user_input = ord_utils.handle_update_request()
         if user_input == "drinks":
-            drink = ord_utils.handle_drink_update()
-            quantity = ord_utils.get_valid_drink_quantity()
-            # needs work
+            full_order = orders.show_order(name=name, surname=surname)
+            alcohol = {}
+            alc_free = {}
+            while True:
+                while True:
+                    drink = ord_utils.handle_drink_update()
+                    if drink not in full_order.keys():
+                        print("You did not order that")
+                        continue
+                    else:
+                        break
+                quantity = ord_utils.get_valid_drink_quantity()
+                if drink in menu_dicts.VALID_ALC_DRINKS:
+                    alcohol[drink] = quantity
+                else:
+                    alc_free[drink] = quantity
+
+                user_answer = ord_utils.handle_extra_drink_update()
+                if user_answer == "no":
+                    break
+                else:
+                    continue
+            if alcohol:
+                pass
+            else:
+                alcohol = None
+            if alc_free:
+                pass
+            else:
+                alc_free = None
+            orders.update_order_quantities(
+                name=name, surname=surname, alcohol=alcohol, alcohol_free=alc_free
+            )
+            if ord_utils.handle_update_meals():
+                full_order = orders.show_order(name=name, surname=surname)
+                foods = {}
+                while True:
+                    while True:
+                        food = ord_utils.handle_food_update()
+                        if food not in full_order.keys():
+                            print("You did not order that")
+                            continue
+                        else:
+                            break
+                    quantity = ord_utils.get_valid_meal_quantity()
+                    foods[food] = quantity
+                    user_answer = ord_utils.handle_extra_food_update()
+                    if user_answer == "no":
+                        break
+                    else:
+                        continue
+                orders.update_order_quantities(name=name, surname=surname, foods=foods)
+                orders.show_order_summarized(name=name, surname=surname)
+            else:
+                orders.show_order_summarized(name=name, surname=surname)
+
         else:
-            food = ord_utils.handle_food_update()
-            quantity = ord_utils.get_valid_meal_quantity()
-            # needs work
+            full_order = orders.show_order(name=name, surname=surname)
+            foods = {}
+            while True:
+                while True:
+                    food = ord_utils.handle_food_update()
+                    if food not in full_order.keys():
+                        print("You did not order that")
+                        continue
+                    else:
+                        break
+                quantity = ord_utils.get_valid_meal_quantity()
+                foods[food] = quantity
+                user_answer = ord_utils.handle_extra_food_update()
+                if user_answer == "no":
+                    break
+                else:
+                    continue
+            orders.update_order_quantities(name=name, surname=surname, foods=foods)
+            if ord_utils.handle_update_drinks():
+                full_order = orders.show_order(name=name, surname=surname)
+                alcohol = {}
+                alc_free = {}
+                while True:
+                    while True:
+                        drink = ord_utils.handle_drink_update()
+                        if drink not in full_order.keys():
+                            print("You did not order that")
+                            continue
+                        else:
+                            break
+                    quantity = ord_utils.get_valid_drink_quantity()
+                    if drink in menu_dicts.VALID_ALC_DRINKS:
+                        alcohol[drink] = quantity
+                    else:
+                        alc_free[drink] = quantity
+
+                    user_answer = ord_utils.handle_extra_drink_update()
+                    if user_answer == "no":
+                        break
+                    else:
+                        continue
+                if alcohol:
+                    pass
+                else:
+                    alcohol = None
+                if alc_free:
+                    pass
+                else:
+                    alc_free = None
+                orders.update_order_quantities(
+                    name=name, surname=surname, alcohol=alcohol, alcohol_free=alc_free
+                )
+                orders.show_order_summarized(name=name, surname=surname)
+            else:
+                orders.show_order_summarized(name=name, surname=surname)
